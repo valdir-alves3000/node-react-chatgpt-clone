@@ -1,12 +1,14 @@
 const openai = require("../config/openai");
+const inputPrompt = require("../models/input-prompt");
 
 module.exports = {
   async sentText(req, res) {
     const openaiAPI = openai.configuration();
+    const inputModel = new inputPrompt(req.body);
 
     try {
       const response = await openaiAPI.createCompletion(
-        openai.textCompletion("css para iniciantes")
+        openai.textCompletion(inputModel)
       );
 
       return res.status(200).json({
@@ -16,8 +18,8 @@ module.exports = {
     } catch (error) {
       return res.status(400).json({
         success: false,
-        error: error.response
-          ? error.response
+        error: error.message
+          ? error.message
           : "there was an inssue on the server",
       });
     }
