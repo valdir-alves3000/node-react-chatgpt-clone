@@ -9,3 +9,50 @@
   color: white;
   background-color: #282c34;
 }
+
+.chatbox {
+  flex: 1;
+  background-color: #353541;
+  position: relative;
+  overflow-y: auto;
+}
+
+.chat-input-holder {
+  padding: 24px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.chat-input-textarea {
+  border: none;
+  outline: none;
+  width: 90%;
+  padding: 12px;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  background-color: #40414f;
+  color: white;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
+  resize: none;
+}
+
+.chat-log {
+  text-align: left;
+  white-space: "pre-wrap";
+}
+
+.chat-message.chatgpt {
+  background-color: #444654;
+}
+
+.avatar {
+  padding: 5px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.avatar.chatgpt {
+  background-color: #0da37f;
+}
