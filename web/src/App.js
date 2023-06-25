@@ -4,10 +4,12 @@ import "./styles/reset.css";
 import { makeRequest } from "./api/api";
 
 import { useState } from "react";
-import { ChatMessage } from "./ChatMessage/ChatMessage";
+import { ChatMessage } from "./components/ChatMessage/ChatMessage";
+import { HideSideMenu } from "./components/HideSideMenu/HideSideMenu";
 import { SideMenu } from "./components/SideMenu/SideMenu";
 
 function App() {
+  const [sideMenuActive, setSideMenuActive] = useState(true);
   const [input, setInput] = useState("");
   const [chatlog, setChatlog] = useState([
     { user: "gpt", message: "Como posso te ajudar hoje?" },
@@ -15,28 +17,57 @@ function App() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    let response = await makeRequest({ prompt: input });
-    response = response.data.split("\n").map((line) => <p>{line}</p>);
+    try {
+      let response = await makeRequest({ prompt: input });
+      response = response.data.split("\n").map((line) => <p>{line}</p>);
 
-    setChatlog([
-      ...chatlog,
-      {
-        user: "me",
-        message: `${input}`,
-      },
-      {
-        user: "gpt",
-        message: response,
-      },
-    ]);
+      setChatlog([
+        ...chatlog,
+        {
+          user: "me",
+          message: `${input}`,
+        },
+        {
+          user: "gpt",
+          message: response,
+        },
+      ]);
+    } catch (error) {
+      setChatlog([
+        ...chatlog,
+        {
+          user: "me",
+          message: `${input}`,
+        },
+        {
+          user: "gpt",
+          message: error.message,
+        },
+      ]);
+    }
 
     setInput("");
+  }
+  function handleToggleSideMenu() {
+    setSideMenuActive(!sideMenuActive);
   }
 
   return (
     <div className="App">
-      <SideMenu />
+      {sideMenuActive && (
+        <SideMenu
+          handleToggleSideMenu={handleToggleSideMenu}
+          sideMenuActive={sideMenuActive}
+        />
+      )}
       <section className="chatbox">
+        {!sideMenuActive && (
+          <HideSideMenu
+            handleToggleSideMenu={handleToggleSideMenu}
+            sideMenuActive={!sideMenuActive}
+          />
+        )}
+
         <div className="chat-log">
           {chatlog.map((message, index) => (
             <ChatMessage key={index} message={message} />
